@@ -12,3 +12,6 @@ A lightweight, shell-automated monitoring agent designed to poll core hardware m
 * **Script Engine:** Bash Shell Interpreter
 * **Unix Pipelines:** `df`, `free`, `awk`, `tr`, `date`
 * **Logical Bounds:** Greater-than-or-equal (`-ge`), Less-than (`-lt`) operational flags
+
+## ⏰ Automation & Scheduling
+The agent is configured to run automatically once daily at 8:00 AM using the Linux background system scheduler. The rules are tracked inside `schedule.cron`.
