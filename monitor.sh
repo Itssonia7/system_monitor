@@ -1,19 +1,23 @@
 #!/bin/bash
 
-# 1. Extract the raw percentage and strip the '%' character
+# 1. Gather hardware utilization metrics
 DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}' | tr -d '%')
-
-# Extract the available RAM in Megabytes (Column 7)
 AVAILABLE_RAM=$(free -m | awk 'NR==2 {print $7}')
 
-echo "Available RAM: ${AVAILABLE_RAM} MB"
+# 2. Define safety thresholds
+DISK_THRESHOLD=80
+RAM_THRESHOLD=1024  # Alert if available memory drops below 1024 MB (1 GB)
 
-# 2. Set our warning limit threshold (e.g., alert if 80% or higher)
-THRESHOLD=80
-
-# 3. Check if the current usage is greater than or equal to the threshold
-if [ "$DISK_USAGE" -ge "$THRESHOLD" ]; then
+# 3. Disk Utilization Health Check
+if [ "$DISK_USAGE" -ge "$DISK_THRESHOLD" ]; then
     echo "⚠️ ALERT: Root disk utilization is dangerously high at ${DISK_USAGE}%!"
 else
     echo "✅ System health check passed: Disk utilization is stable at ${DISK_USAGE}%."
+fi
+
+# 4. Memory Availability Health Check
+if [ "$AVAILABLE_RAM" -lt "$RAM_THRESHOLD" ]; then
+    echo "⚠️ ALERT: Running critically low on memory! Only ${AVAILABLE_RAM} MB available."
+else
+    echo "✅ System health check passed: Available memory is stable at ${AVAILABLE_RAM} MB."
 fi
