@@ -3,6 +3,11 @@
 # 1. Extract the raw percentage and strip the '%' character
 DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}' | tr -d '%')
 
+# Extract the available RAM in Megabytes (Column 7)
+AVAILABLE_RAM=$(free -m | awk 'NR==2 {print $7}')
+
+echo "Available RAM: ${AVAILABLE_RAM} MB"
+
 # 2. Set our warning limit threshold (e.g., alert if 80% or higher)
 THRESHOLD=80
 
